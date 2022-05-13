@@ -32,6 +32,7 @@ protected:
 protected slots:
   void onAddConnectorButtonClicked();
   void onRemoveConnectorButtonClicked();
+  void onNextModuleButtonClicked();
 
 private:
   Q_DECLARE_PRIVATE(qSlicerOpenIGTLinkIFModuleWidget);

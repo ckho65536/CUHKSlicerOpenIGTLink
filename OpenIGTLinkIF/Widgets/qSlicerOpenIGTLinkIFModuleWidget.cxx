@@ -16,6 +16,12 @@
 // OpenIGTLinkIF MRML includes
 #include "vtkMRMLIGTLConnectorNode.h"
 
+#include "vtkSlicerConfigure.h" // For Slicer_QM_OUTPUT_DIRS, Slicer_BUILD_I18N_SUPPORT, Slicer_USE_PYTHONQT
+
+#ifdef Slicer_USE_PYTHONQT
+#include "PythonQt.h"
+#endif
+
 //-----------------------------------------------------------------------------
 /// \ingroup Slicer_QtModules_OpenIGTLinkIF
 class qSlicerOpenIGTLinkIFModuleWidgetPrivate: public Ui_qSlicerOpenIGTLinkIFModule
@@ -80,6 +86,10 @@ void qSlicerOpenIGTLinkIFModuleWidget::setup()
           SLOT(onAddConnectorButtonClicked()));
   connect(d->RemoveConnectorButton, SIGNAL(clicked()), this,
           SLOT(onRemoveConnectorButtonClicked()));
+  connect(d->NextModuleButton, SIGNAL(clicked()), this,
+      SLOT(onNextModuleButtonClicked()));
+
+  
 
   // --------------------------------------------------
   //  I/O Configuration Section
@@ -140,4 +150,17 @@ void qSlicerOpenIGTLinkIFModuleWidget::onRemoveConnectorButtonClicked()
   this->mrmlScene()->RemoveNode(connectorNode);
 }
 
+void qSlicerOpenIGTLinkIFModuleWidget::onNextModuleButtonClicked()
+{
+
+#ifdef Slicer_USE_PYTHONQT
+    PythonQt::init();
+    PythonQtObjectPtr context = PythonQt::self()->getMainModule();
+    context.evalScript(QString(
+        "pluginHandlerSingleton = slicer.qSlicerSubjectHierarchyPluginHandler.instance() \n"
+        "pluginHandlerSingleton.pluginByName('Default').switchToModule('DICOM') \n"
+    ));
+   
+#endif
+}
 
