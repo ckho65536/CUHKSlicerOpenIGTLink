@@ -69,7 +69,7 @@
          <item>
           <widget class="QPushButton" name="NextModuleButton">
            <property name="text">
-            <string>Next step</string>
+            <string>Next step - Create Needle</string>
            </property>
           </widget>
          </item>
